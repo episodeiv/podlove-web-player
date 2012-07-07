@@ -19,6 +19,21 @@
 <script src="podlove-web-player.js"></script>
 <script src="podlove-web-player-embed.js"></script>
 
-<?php echo $mediahtml; ?>
+  <header>
+    <img src="" alt="Cover">
+    <h1><?php wp_title(); ?></h1>
+    <p></p>
+  </header>
+
+  <article>
+    <?php echo $mediahtml; ?>
+  </article>
+
+  <footer>
+    <?php bloginfo('name'); ?><br>
+    <a href="<?php echo get_permalink(); ?>" target="blank">
+      show website
+    </a>
+  </footer>
 
 </html>

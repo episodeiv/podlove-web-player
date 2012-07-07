@@ -98,7 +98,7 @@ body {
    ========================================================================== */
 
 a {
-	color: #333;
+	color: #459db6;
 	text-decoration: none;
 }
 
@@ -106,6 +106,7 @@ a:visited {
 }
 
 a:hover {
+	text-decoration: underline;
 }
 
 a:focus {
@@ -432,10 +433,7 @@ html, body {
 	width: 100%;
 	overflow: hidden;
 	background: black;
-}
-
-.mediaelementjs_player_container {
-	height: 100%;
+	min-height: 94px;
 }
 
 
@@ -443,8 +441,18 @@ html, body {
 .mediaelementjs_player_container video,
 .mediaelementjs_player_container,
 .mejs-container {
-	width: 100% !important;
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
 	height: 100% !important;
+	width: 100% !important;
+}
+.mediaelementjs_player_container {
+	top: 64px;
+	min-height: 30px;
+	height: auto !important;
 }
 
 .mediaelementjs_player_container .pwp_chapters {
@@ -469,6 +477,66 @@ html, body {
 }
 .mediaelementjs_player_container .pwp_chapters tr:last-child {
 	padding-bottom: 10px;
+}
+
+
+body > header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 64px;
+	padding: 0;
+	margin: 0;
+	z-index: 3;
+}
+
+body > header img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	max-width: 64px;
+	height: 64px;
+}
+
+body > header h1 {
+	position: absolute;
+	top: 0;
+	left: 64px;
+	right: 0;
+	height: 20px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+	font-weight: normal;
+	padding: 5px 7px;
+	margin: 0;
+	font-size: 20px;
+	line-height: 1.1;
+}
+body > header h1:hover,
+body > header h1:focus {
+	height: auto;
+	white-space: normal;
+	overflow: visible;
+	background: black;
+}
+
+body > article {
+	z-index: 4;
+}
+
+body > footer {
+	position: absolute;
+	top: 26px;
+	left: 64px;
+	right: 0;
+	padding: 4px 7px;
+	margin: 0;
+	color: whiteSmoke;
+	font-size: 75%;
+	z-index: 5;
 }
 
 /* ==|== non-semantic helper classes ========================================

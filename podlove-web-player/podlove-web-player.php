@@ -420,7 +420,7 @@ _end_;
 		<div class="pwp_footer" rel="wp_pwp_{$podlovePlayerIndex}">
 			Embed this Podcast:
 
-			<textarea class="code" readonly>&lt;iframe src=&quot;{$embedURL}&quot; height=&quot;30&quot; width=&quot;400&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</textarea>
+			<textarea class="code" readonly>&lt;iframe src=&quot;{$embedURL}&quot; height=&quot;94&quot; width=&quot;400&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</textarea>
 		</div>
 
 _end_;
