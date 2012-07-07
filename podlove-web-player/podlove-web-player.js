@@ -186,7 +186,12 @@ var PODLOVE = PODLOVE || {};
 		var jqPlayer = $(player),
 			playerId = jqPlayer.attr('id'),
 			list = $('table[rel=' + playerId + ']'),
-			marks = list.find('span');
+			marks = list.find('span'),
+			footer = $('.pwp_footer[rel=' + playerId + ']');
+
+		footer.find('textarea').click(function () {
+			$(this).select();
+		});
 
 		list
 			.show()

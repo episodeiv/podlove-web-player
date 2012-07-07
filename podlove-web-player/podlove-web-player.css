@@ -22,3 +22,22 @@
 	display: none; /* only show if js works */
 	margin-bottom: 0 !important;
 }
+
+.mediaelementjs_player_container .pwp_footer {
+	display: block;
+	font-size: 85%;
+	background: whiteSmoke;
+	padding: 5px 10px;
+}
+
+.mediaelementjs_player_container .pwp_footer .code {
+	display: block;
+	border: 1px solid #ccc;
+	margin: 4px 0;
+	padding: 3px;
+	background: white;
+	font-family: monospace, serif;
+	_font-family: 'courier new', monospace;
+	resize: none;
+	font-size: 90%;
+}

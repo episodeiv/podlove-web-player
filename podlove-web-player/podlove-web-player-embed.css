@@ -431,6 +431,7 @@ html, body {
 	height: 100%;
 	width: 100%;
 	overflow: hidden;
+	background: black;
 }
 
 .mediaelementjs_player_container {
@@ -443,16 +444,19 @@ html, body {
 .mediaelementjs_player_container,
 .mejs-container {
 	width: 100% !important;
+	height: 100% !important;
 }
 
 .mediaelementjs_player_container .pwp_chapters {
+	/* Don't show at all (now) */
+	display: none !important;
+
 	position: absolute;
 	top: 0;
 	left: 0;
 	right: 0;
 	bottom: 0;
 	overflow: auto;
-	display: block;
 	background: white;
 	color: #333;
 }

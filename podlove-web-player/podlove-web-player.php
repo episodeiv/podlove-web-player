@@ -29,6 +29,8 @@ function podlove_pwp_install() {
 	add_option('pwp_video_skin', '');
 	add_option('pwp_script_on_demand', false);
 
+	add_option('pwp_allow_embedding', true);
+
 	add_option('pwp_default_video_height', 270);
 	add_option('pwp_default_video_width', 480);
 	add_option('pwp_default_video_type', '');
@@ -44,6 +46,8 @@ register_deactivation_hook(__FILE__, 'podlove_pwp_remove');
 function podlove_pwp_remove() {
 	delete_option('pwp_video_skin');
 	delete_option('pwp_script_on_demand');
+
+	delete_option('pwp_allow_embedding');
 
 	delete_option('pwp_default_video_height');
 	delete_option('pwp_default_video_width');
@@ -70,6 +74,8 @@ function podlove_pwp_register_settings() {
 	//register our settings
 	register_setting('pwp_settings', 'pwp_video_skin');
 	register_setting('pwp_settings', 'pwp_script_on_demand');
+
+	register_setting('pwp_settings', 'pwp_allow_embedding');
 
 	register_setting('pwp_settings', 'pwp_default_video_height');
 	register_setting('pwp_settings', 'pwp_default_video_width');
@@ -101,6 +107,14 @@ function podlove_pwp_settings_page() {
 			</th>
 			<td >
 				<input name="pwp_script_on_demand" type="checkbox" id="pwp_script_on_demand" <?php echo (get_option('pwp_script_on_demand') == true ? "checked" : "")  ?> />
+			</td>
+		</tr>
+		<tr valign="top">
+			<th scope="row">
+				<label for="pwp_allow_embedding">Allow embedding</label>
+			</th>
+			<td >
+				<input name="pwp_allow_embedding" type="checkbox" id="pwp_allow_embedding" <?php echo (get_option('pwp_allow_embedding') == true ? "checked" : "")  ?> />
 			</td>
 		</tr>
 	</table>
@@ -178,7 +192,7 @@ function podlove_pwp_settings_page() {
 	</table>
 
 	<input type="hidden" name="action" value="update" />
-	<input type="hidden" name="page_options" value="pwp_default_video_width,pwp_default_video_height,pwp_default_video_type,pwp_default_audio_type,pwp_default_audio_width,pwp_default_audio_height,pwp_video_skin,pwp_script_on_demand" />
+	<input type="hidden" name="page_options" value="pwp_default_video_width,pwp_default_video_height,pwp_default_video_type,pwp_default_audio_type,pwp_default_audio_width,pwp_default_audio_height,pwp_video_skin,pwp_script_on_demand,pwp_allow_embedding" />
 
 	<p>
 		<input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" />
@@ -226,7 +240,10 @@ add_action('wp_print_styles', 'podlove_pwp_add_styles');
 
 
 function podlove_pwp_media_shortcode($tagName, $atts) {
-	if (!is_single() || !isset($_GET['podlove_pwp_embed'])) {
+	$isEmbeddable = get_option('pwp_allow_embedding') == true;
+	$showEmbedPlayer = $isEmbeddable && is_single() && isset($_GET['podlove_pwp_embed']);
+
+	if (!$showEmbedPlayer) {
 		ob_end_flush();
 	}
 
@@ -379,24 +396,48 @@ function podlove_pwp_media_shortcode($tagName, $atts) {
 	$options_string = str_replace('"', '\'', $options_string);
 
 	$mediahtml = <<<_end_
+
 	<div class="mediaelementjs_player_container">
-	<{$tagName} width="{$width}" height="{$height}" id="wp_pwp_{$podlovePlayerIndex}" controls="controls" {$attributes_string} class="{$skin_class}" data-mejsoptions="{$options_string}">
-		{$sources_string}
-	</{$tagName}>
+		<{$tagName} width="{$width}" height="{$height}" id="wp_pwp_{$podlovePlayerIndex}" controls="controls" {$attributes_string} class="{$skin_class}" data-mejsoptions="{$options_string}">
+			{$sources_string}
+		</{$tagName}>
 _end_;
 
 	// Chapters Table and Behaviour
-	if ($chapters) {
+	if ($chapters && !$showEmbedPlayer) {
 		if ($chaptertable = podlove_pwp_render_chapters($chapters)) {
 			$mediahtml .= "\n\n" . $chaptertable;
 		}
 	}
-	$mediahtml .= "\n\n</div>\n\n<script>jQuery(function() { PODLOVE.web_player('wp_pwp_{$podlovePlayerIndex}'); });</script>\n";
+
+	if ($isEmbeddable && !$showEmbedPlayer) {
+		$embedURL = get_permalink();
+		$embedURL .= parse_url($embedURL, PHP_URL_QUERY) ? '&' : '?';
+		$embedURL .= 'podlove_pwp_embed';
+
+		$mediahtml .= <<<_end_
+
+		<div class="pwp_footer" rel="wp_pwp_{$podlovePlayerIndex}">
+			Embed this Podcast:
+
+			<textarea class="code" readonly>&lt;iframe src=&quot;{$embedURL}&quot; height=&quot;30&quot; width=&quot;400&quot; frameborder=&quot;0&quot;&gt;&lt;/iframe&gt;</textarea>
+		</div>
+
+_end_;
+	}
+
+
+	$mediahtml .= <<<_end_
+
+	</div>
+	<script>jQuery(function() { PODLOVE.web_player('wp_pwp_{$podlovePlayerIndex}'); });</script>
+
+_end_;
 
 	$podlovePlayerIndex++;
 
 	// if embeded load seperate template
-	if (is_single() && isset($_GET['podlove_pwp_embed'])) {
+	if ($showEmbedPlayer) {
 		ob_end_clean();
 
 		define('TEMPLATE_DIR_URL', plugin_dir_url(__FILE__));
@@ -496,7 +537,7 @@ add_action('init', 'podlove_pwp_init');
 
 
 function podlove_pwp_embed_template() {
-	if (is_single() && isset($_GET['podlove_pwp_embed'])) {
+	if (get_option('pwp_allow_embedding') == true && is_single() && isset($_GET['podlove_pwp_embed'])) {
 		ob_start();
 	}
 }
