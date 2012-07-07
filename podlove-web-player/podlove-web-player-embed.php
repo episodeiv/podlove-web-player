@@ -1,10 +1,10 @@
 <!doctype html>
 <html <?php language_attributes(); ?>>
-<meta charset="<?php bloginfo( 'charset' ); ?>">
+<meta charset="<?php bloginfo('charset'); ?>">
 
 <meta name="viewport" content="height=device-height, width=device-width">
 
-<title><?php wp_title(); ?> <?php bloginfo( 'name' ); ?></title>
+<title><?php wp_title(); ?> <?php bloginfo('name'); ?></title>
 
 <base href="<?php echo TEMPLATE_DIR_URL; ?>">
 
