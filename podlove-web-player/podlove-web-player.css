@@ -20,5 +20,5 @@
 
 .mediaelementjs_player_container .pwp_chapters {
 	display: none; /* only show if js works */
-	margin-bottom: 0!important;
+	margin-bottom: 0 !important;
 }
